@@ -1,11 +1,11 @@
 package Principal;
 
+import Estructuras.Lista;
 import GUI.Frame;
 import Estructuras.Pila;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,44 +22,52 @@ import java.util.logging.Logger;
 public class Grafo {
 
     //Lista enlazada usada para almacenar todos los nodos
-    LinkedList<Nodo> nodos;
+    Lista<Nodo> nodos;
     //Lista enlazada usada, para almacenar
-    LinkedList<LinkedList<Nodo>> lista;
+    Lista<Lista<Nodo>> iteraciones;
     //Vector con los nodos ya recorridos
     boolean visited[];
     static Random r = new Random();
     //Matriz de adyacencia
     int matriz[][];
 
-    public Grafo(int nodes) {
-        this.nodos = new LinkedList();
-        this.lista = new LinkedList();
+    public Grafo(int nodes, int mascarilla) {
+        this.nodos = new Lista();
+        this.iteraciones = new Lista();
         //Crea los nodos
-        createNodes(nodes);
+        createNodes(nodes, mascarilla);
         this.visited = new boolean[nodes];
         this.matriz = new int[nodes][nodes];
     }
 
-    public void createNodes(int n) {
+    public void createNodes(int n, int mascarilla) {
         Nodo.size = 850/n;
         if(Nodo.size<30){
             Nodo.size = 30;
         }
-        Random r1 = new Random();
+        boolean m = false;
+        if (mascarilla == 0) m = true;
+        
+        
         for (int i = 0; i < n; i++) {
             if (nodos.isEmpty()) {
-                int x = r1.nextInt(858-Nodo.size);
-                int y = r1.nextInt(630-Nodo.size);
-                nodos.add(new Nodo(i, x, y ));
+                int x = r.nextInt(858-Nodo.size);
+                int y = r.nextInt(630-Nodo.size);
+                if (mascarilla == 2) {
+                    m = r.nextBoolean();
+                }
+                if (mascarilla == 2)m = r.nextBoolean();
+                nodos.add(new Nodo(i, x, y, m));
             } else {
                 
-                int x = r1.nextInt(858-Nodo.size);
-                int y = r1.nextInt(630-Nodo.size);
+                int x = r.nextInt(858-Nodo.size);
+                int y = r.nextInt(630-Nodo.size);
                 while (intercede(x, y)) {
-                    x = r1.nextInt(858-Nodo.size);
-                    y = r1.nextInt(630-Nodo.size);
+                    x = r.nextInt(858-Nodo.size);
+                    y = r.nextInt(630-Nodo.size);
                 }
-                nodos.add(new Nodo(i, x, y));
+                if (mascarilla == 2)m = r.nextBoolean();
+                nodos.add(new Nodo(i, x, y, m));
             }
         }
     }
@@ -88,8 +96,8 @@ public class Grafo {
         return false;
     }
 
-    public static Grafo crearGrafo(int nodes, float p) {
-        Grafo g = new Grafo(nodes);
+    public static Grafo crearGrafo(int nodes, float p, int mascarillas) {
+        Grafo g = new Grafo(nodes, mascarillas);
         int w = -1;
         double lp = Math.log(1.0 - p);
         Random r = new Random();
@@ -206,8 +214,8 @@ public class Grafo {
     }
 
     //Crea una lista con todos los nodos ya infectados
-    public LinkedList<Nodo> listInfectados() {
-        LinkedList l = new LinkedList();
+    public Lista<Nodo> listInfectados() {
+        Lista l = new Lista();
         for (Nodo nodo : nodos) {
             if (nodo.infectado) {
                 l.add(nodo);
@@ -218,10 +226,9 @@ public class Grafo {
 
     //Empieza la simulación y genera las iteraciones
     public static void generarIteraciones(Grafo g, Graphics gr) {
-
         int i = 0;
         while (!g.findInfectados()) {
-            g.lista.add(new LinkedList());
+            g.iteraciones.add(new Lista());
             switch (i) {
                 case 0:
                     i++;
@@ -230,8 +237,7 @@ public class Grafo {
                     int a = r.nextInt(g.nodos.size());
                     Nodo n = g.nodos.get(a);
                     n.infectado = true;
-                    n.draw(gr);
-                    g.lista.get(i).add(n);
+                    g.iteraciones.get(i).add(n);
                     break;
                 default:
                     for (Nodo infectado : g.listInfectados()) {
@@ -239,7 +245,7 @@ public class Grafo {
                             if (!nodo.infectado) {
                                 nodo.infectado = g.checkProbability(infectado, nodo, g.matriz[infectado.valor][nodo.valor]);
                                 if (nodo.infectado) {
-                                    g.lista.get(i).add(nodo);
+                                    g.iteraciones.get(i).add(nodo);
                                 }
                             }
                         }
@@ -253,7 +259,7 @@ public class Grafo {
     //Muestra las iteraciones
     public void displayIteraciones() {
         int i = 0;
-        for (LinkedList<Nodo> list : this.lista) {
+        for (Lista<Nodo> list : this.iteraciones) {
             if (!list.isEmpty()) {
                 System.out.print("Iteracion " + i + " [");
                 for (Nodo nodo : list) {
@@ -316,37 +322,20 @@ public class Grafo {
         }
     }
 
-    /*
-    public static void main(String[] args) throws InterruptedException {
-        Grafo g = crearGrafo(10, 0.09f);
-        //Mientras el grafo que se crea no sea fuertemente conexo, no dejará de generarlos
-        while (!g.isStronglyConnected()) {
-            g = crearGrafo(300, 0.09f);
-        }
-        generarIteraciones(g);
-        g.checkMatriz();
-        g.displayIteraciones();
-        g.displayGrafo();
-        g.displayMatriz();
-        Frame frame = new Frame();
-        frame.setVisible(true);
-        frame.drawGrafo(g);
-    }
-     */
-    public LinkedList<Nodo> getNodos() {
+    public Lista<Nodo> getNodos() {
         return nodos;
     }
 
-    public void setNodos(LinkedList<Nodo> nodos) {
+    public void setNodos(Lista<Nodo> nodos) {
         this.nodos = nodos;
     }
 
-    public LinkedList<LinkedList<Nodo>> getLista() {
-        return lista;
+    public Lista<Lista<Nodo>> getIteraciones() {
+        return iteraciones;
     }
 
-    public void setLista(LinkedList<LinkedList<Nodo>> lista) {
-        this.lista = lista;
+    public void setLista(Lista<Lista<Nodo>> lista) {
+        this.iteraciones = lista;
     }
 
     public boolean[] getVisited() {

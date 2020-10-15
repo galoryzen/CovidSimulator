@@ -22,13 +22,14 @@ public class Nodo {
     int x;
     int y;
     boolean infectado = false;
-    boolean mascarilla = true;
+    boolean mascarilla;
     
-    public Nodo(int valor, int x, int y){
+    public Nodo(int valor, int x, int y, boolean mascarilla){
         this.valor = valor;
         this.x = x;
         this.y = y;
         conexiones = new LinkedList();
+        this.mascarilla = mascarilla;
     }
     
     public Nodo(int valor){
@@ -79,12 +80,12 @@ public class Nodo {
     }
 
     private void drawConexiones(Graphics g) {
-        for (Nodo conexione : conexiones) {
+        for (Nodo conexion : conexiones) {
             if(infectado)
                 g.setColor(Color.red);
             else
                 g.setColor(Color.white);
-            g.drawLine(x+size/2, y+size/2, conexione.getX()+size/2, conexione.getY()+size/2);
+            g.drawLine(x+size/2, y+size/2, conexion.getX()+size/2, conexion.getY()+size/2);
             
         }
     }

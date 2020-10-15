@@ -1,6 +1,6 @@
 package GUI;
 
-
+import Estructuras.Lista;
 import Helpers.MouseL;
 import Principal.Grafo;
 import static Principal.Grafo.crearGrafo;
@@ -9,7 +9,8 @@ import Principal.Nodo;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,13 +32,14 @@ public class Frame extends javax.swing.JFrame {
     Grafo g;
     Graphics panelg;
     int it = 0;
+
     public Frame() {
         initComponents();
         panelg = panelDraw.getGraphics();
         /*
         MouseL ml = new MouseL();
         this.addMouseListener(ml);
-        */
+         */
     }
 
     /**
@@ -52,10 +54,10 @@ public class Frame extends javax.swing.JFrame {
         panel = new javax.swing.JPanel();
         panelDraw = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        Crear = new javax.swing.JButton();
         itera = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Anterior = new javax.swing.JButton();
+        Siguiente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,24 +79,24 @@ public class Frame extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Crear");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Crear.setText("Crear");
+        Crear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                CrearActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Atrás");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Anterior.setText("Atrás");
+        Anterior.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                AnteriorActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Siga");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        Siguiente.setText("Siga");
+        Siguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                SiguienteActionPerformed(evt);
             }
         });
 
@@ -115,14 +117,14 @@ public class Frame extends javax.swing.JFrame {
                                     .addComponent(itera)))
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGap(40, 40, 40)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(Crear, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 27, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)
+                        .addComponent(Anterior)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(Siguiente)
                         .addGap(22, 22, 22))))
         );
         panelLayout.setVerticalGroup(
@@ -133,11 +135,11 @@ public class Frame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(itera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(Crear)
                 .addGap(49, 49, 49)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(Anterior)
+                    .addComponent(Siguiente))
                 .addGap(141, 141, 141))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                 .addContainerGap(81, Short.MAX_VALUE)
@@ -166,11 +168,11 @@ public class Frame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        g = crearGrafo(10, 0.09f);
+    private void CrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearActionPerformed
+        g = crearGrafo(10, 0.2f, 1);
         //Mientras el grafo que se crea no sea fuertemente conexo, no dejará de generarlos
         while (!g.isStronglyConnected()) {
-            g = crearGrafo(10, 0.09f);
+            g = crearGrafo(10, 0.2f, 1);
         }
         it = 0;
         itera.setText(String.valueOf(it));
@@ -179,47 +181,47 @@ public class Frame extends javax.swing.JFrame {
         } catch (InterruptedException ex) {
             Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        generarIteraciones(g,panelDraw.getGraphics());
+
+        generarIteraciones(g, panelDraw.getGraphics());
         g.checkMatriz();
         g.displayIteraciones();
         g.displayGrafo();
         g.displayMatriz();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_CrearActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        LinkedList<Nodo> n = g.getLista().get(it);
+    private void AnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnteriorActionPerformed
+        Lista<Nodo> n = g.getIteraciones().get(it);
         for (Nodo nodo : g.getNodos()) {
-            if(n.contains(nodo)){
+            if (n.contains(nodo)) {
                 nodo.setInfeccion(false);
                 nodo.draw(panelg);
             }
         }
-        if(it>0)
+        if (it > 0) {
             it--;
-        
+        }
         itera.setText(String.valueOf(it));
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_AnteriorActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        LinkedList<Nodo> n = g.getLista().get(it);
+    private void SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SiguienteActionPerformed
+        if (it < g.getIteraciones().size() - 1) {
+            it++;
+        }
+        itera.setText(String.valueOf(it));
+        Lista<Nodo> n = g.getIteraciones().get(it);
         for (Nodo nodo : n) {
             nodo.setInfeccion(true);
             nodo.draw(panelg);
         }
         System.out.println(it);
-        System.out.println(g.getLista().size());
-        if(it<g.getLista().size()-1)
-            it++;
-        itera.setText(String.valueOf(it));
-    }//GEN-LAST:event_jButton3ActionPerformed
-
+        System.out.println(g.getIteraciones().size());
+    }//GEN-LAST:event_SiguienteActionPerformed
 
     public void drawGrafo(Grafo gr) throws InterruptedException {
         panelDraw.getGraphics().clearRect(0, 0, panelDraw.getWidth(), panelDraw.getHeight());
         panelDraw.getGraphics().fillRect(0, 0, panelDraw.getWidth(), panelDraw.getHeight());
         gr.draw(panelDraw.getGraphics());
-        
+
         /*
         int i = 0;
         while (i < gr.getNodos().size()) {
@@ -228,14 +230,14 @@ public class Frame extends javax.swing.JFrame {
             g.drawString(String.valueOf(i), 30+i*100, panel.getHeight()/2);
             i++;
         }
-        */
+         */
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Anterior;
+    private javax.swing.JButton Crear;
+    private javax.swing.JButton Siguiente;
     private javax.swing.JTextField itera;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel panel;
     private javax.swing.JPanel panelDraw;
