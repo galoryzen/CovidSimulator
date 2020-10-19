@@ -1,6 +1,6 @@
 package Principal;
 
-
+import Estructuras.Lista;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
@@ -10,35 +10,34 @@ import java.util.LinkedList;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Raul
  */
 public class Nodo {
+
     static int size = 30;
     int valor;
-    LinkedList<Nodo> conexiones;
+    Lista<Nodo> conexiones;
     int x;
     int y;
     boolean infectado = false;
     boolean mascarilla;
-    
-    public Nodo(int valor, int x, int y, boolean mascarilla){
+
+    public Nodo(int valor, int x, int y, boolean mascarilla) {
         this.valor = valor;
         this.x = x;
         this.y = y;
-        conexiones = new LinkedList();
+        conexiones = new Lista();
         this.mascarilla = mascarilla;
     }
-    
-    public Nodo(int valor){
+
+    public Nodo(int valor) {
         this.valor = valor;
-        conexiones = new LinkedList();
+        conexiones = new Lista();
     }
 
-    
-    public LinkedList<Nodo> getConexiones() {
+    public Lista<Nodo> getConexiones() {
         return conexiones;
     }
 
@@ -57,8 +56,8 @@ public class Nodo {
     public boolean isInfectado() {
         return infectado;
     }
-    
-    public void setInfeccion(boolean n){
+
+    public void setInfeccion(boolean n) {
         infectado = n;
     }
 
@@ -66,29 +65,34 @@ public class Nodo {
         return mascarilla;
     }
 
+    public void setMascarilla(boolean n) {
+        this.mascarilla = n;
+    }
+
     public void setInfectado(boolean infectado) {
         this.infectado = infectado;
     }
 
     public void draw(Graphics g) {
-        if(infectado)
+        if (infectado) {
             g.setColor(Color.red);
-        else
+        } else {
             g.setColor(Color.white);
+        }
         g.fillOval(this.x, this.y, size, size);
         drawConexiones(g);
     }
 
     private void drawConexiones(Graphics g) {
         for (Nodo conexion : conexiones) {
-            if(infectado)
+            if (infectado) {
                 g.setColor(Color.red);
-            else
+            } else {
                 g.setColor(Color.white);
-            g.drawLine(x+size/2, y+size/2, conexion.getX()+size/2, conexion.getY()+size/2);
-            
+            }
+            g.drawLine(x + size / 2, y + size / 2, conexion.getX() + size / 2, conexion.getY() + size / 2);
+
         }
     }
-    
-    
+
 }

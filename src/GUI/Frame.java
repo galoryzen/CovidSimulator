@@ -32,9 +32,12 @@ public class Frame extends javax.swing.JFrame {
     Grafo g;
     Graphics panelg;
     int it = 0;
+    StringBuilder sb = new StringBuilder();
+    String texto = "Iteración #";
 
     public Frame() {
         initComponents();
+        this.setLocationRelativeTo(null);
         panelg = panelDraw.getGraphics();
         /*
         MouseL ml = new MouseL();
@@ -51,131 +54,154 @@ public class Frame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panel = new javax.swing.JPanel();
         panelDraw = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        Crear = new javax.swing.JButton();
         itera = new javax.swing.JTextField();
         Anterior = new javax.swing.JButton();
+        Crear = new javax.swing.JButton();
         Siguiente = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        Salir = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 0, 0));
+        setUndecorated(true);
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        panelDraw.setOpaque(false);
 
         javax.swing.GroupLayout panelDrawLayout = new javax.swing.GroupLayout(panelDraw);
         panelDraw.setLayout(panelDrawLayout);
         panelDrawLayout.setHorizontalGroup(
             panelDrawLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 848, Short.MAX_VALUE)
+            .addGap(0, 1070, Short.MAX_VALUE)
         );
         panelDrawLayout.setVerticalGroup(
             panelDrawLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 630, Short.MAX_VALUE)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
 
-        jTextField1.setText("Iteraciones");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        getContentPane().add(panelDraw, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 1070, 510));
+
+        itera.setBackground(new java.awt.Color(0, 34, 25));
+        itera.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
+        itera.setForeground(new java.awt.Color(255, 255, 255));
+        itera.setBorder(null);
+        itera.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        itera.setFocusable(false);
+        itera.setOpaque(false);
+        itera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                iteraActionPerformed(evt);
             }
         });
+        getContentPane().add(itera, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 20));
 
-        Crear.setText("Crear");
-        Crear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CrearActionPerformed(evt);
-            }
-        });
-
-        Anterior.setText("Atrás");
+        Anterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/atras.png"))); // NOI18N
+        Anterior.setBorderPainted(false);
+        Anterior.setContentAreaFilled(false);
+        Anterior.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Anterior.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AnteriorActionPerformed(evt);
             }
         });
+        getContentPane().add(Anterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 580, 50, 90));
 
-        Siguiente.setText("Siga");
+        Crear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/generar.png"))); // NOI18N
+        Crear.setBorderPainted(false);
+        Crear.setContentAreaFilled(false);
+        Crear.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Crear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CrearActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Crear, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 580, 90, 90));
+
+        Siguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/adelante.png"))); // NOI18N
+        Siguiente.setBorder(null);
+        Siguiente.setBorderPainted(false);
+        Siguiente.setContentAreaFilled(false);
+        Siguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Siguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SiguienteActionPerformed(evt);
             }
         });
+        getContentPane().add(Siguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 580, 40, 90));
 
-        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
-        panel.setLayout(panelLayout);
-        panelLayout.setHorizontalGroup(
-            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelDraw, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelLayout.createSequentialGroup()
-                                .addGap(31, 31, 31)
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1)
-                                    .addComponent(itera)))
-                            .addGroup(panelLayout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(Crear, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 27, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(Anterior)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Siguiente)
-                        .addGap(22, 22, 22))))
-        );
-        panelLayout.setVerticalGroup(
-            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLayout.createSequentialGroup()
-                .addGap(91, 91, 91)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(itera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Crear)
-                .addGap(49, 49, 49)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Anterior)
-                    .addComponent(Siguiente))
-                .addGap(141, 141, 141))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addContainerGap(81, Short.MAX_VALUE)
-                .addComponent(panelDraw, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/mascarilla.png"))); // NOI18N
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 590, 70, 50));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/sinmascarilla.png"))); // NOI18N
+        jButton2.setBorderPainted(false);
+        jButton2.setContentAreaFilled(false);
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 590, 60, -1));
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/random.png"))); // NOI18N
+        jButton3.setToolTipText("");
+        jButton3.setBorder(null);
+        jButton3.setBorderPainted(false);
+        jButton3.setContentAreaFilled(false);
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 590, -1, 60));
+
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/play.png"))); // NOI18N
+        jButton4.setBorder(null);
+        jButton4.setBorderPainted(false);
+        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton4.setOpaque(false);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 580, -1, 90));
+
+        Salir.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
+        Salir.setForeground(new java.awt.Color(255, 0, 0));
+        Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/boton-salir-a-la-aplicacion.png"))); // NOI18N
+        Salir.setText("Salir");
+        Salir.setBorder(null);
+        Salir.setBorderPainted(false);
+        Salir.setContentAreaFilled(false);
+        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 0, -1, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/gui2.png"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 680));
+
+        jTextField1.setText("jTextField1");
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 590, 160, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
     private void CrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearActionPerformed
-        g = crearGrafo(10, 0.2f, 1);
+        g = crearGrafo(10, 0.2f, 0);
         //Mientras el grafo que se crea no sea fuertemente conexo, no dejará de generarlos
         while (!g.isStronglyConnected()) {
-            g = crearGrafo(10, 0.2f, 1);
+            g = crearGrafo(10, 0.2f, 0);
         }
         it = 0;
-        itera.setText(String.valueOf(it));
+        StringBuilder sb = new StringBuilder();
+        sb.append(texto + String.valueOf(it));
+        itera.setText(String.valueOf(sb));
         try {
             drawGrafo(g);
         } catch (InterruptedException ex) {
@@ -200,14 +226,18 @@ public class Frame extends javax.swing.JFrame {
         if (it > 0) {
             it--;
         }
-        itera.setText(String.valueOf(it));
+        StringBuilder sb = new StringBuilder();
+        sb.append(texto + String.valueOf(it));
+        itera.setText(String.valueOf(sb));
     }//GEN-LAST:event_AnteriorActionPerformed
 
     private void SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SiguienteActionPerformed
         if (it < g.getIteraciones().size() - 1) {
             it++;
         }
-        itera.setText(String.valueOf(it));
+        StringBuilder sb = new StringBuilder();
+        sb.append(texto + String.valueOf(it));
+        itera.setText(String.valueOf(sb));
         Lista<Nodo> n = g.getIteraciones().get(it);
         for (Nodo nodo : n) {
             nodo.setInfeccion(true);
@@ -216,6 +246,30 @@ public class Frame extends javax.swing.JFrame {
         System.out.println(it);
         System.out.println(g.getIteraciones().size());
     }//GEN-LAST:event_SiguienteActionPerformed
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_SalirActionPerformed
+
+    private void iteraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iteraActionPerformed
+        
+    }//GEN-LAST:event_iteraActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        while (it < g.getIteraciones().size() - 1) {
+            it++;
+            Lista<Nodo> n = g.getIteraciones().get(it);
+            for (Nodo nodo : n) {
+                nodo.setInfeccion(true);
+                nodo.draw(panelg);
+            }
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     public void drawGrafo(Grafo gr) throws InterruptedException {
         panelDraw.getGraphics().clearRect(0, 0, panelDraw.getWidth(), panelDraw.getHeight());
@@ -236,10 +290,15 @@ public class Frame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Anterior;
     private javax.swing.JButton Crear;
+    private javax.swing.JButton Salir;
     private javax.swing.JButton Siguiente;
     private javax.swing.JTextField itera;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JPanel panel;
     private javax.swing.JPanel panelDraw;
     // End of variables declaration//GEN-END:variables
 }

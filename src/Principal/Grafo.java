@@ -30,6 +30,7 @@ public class Grafo {
     static Random r = new Random();
     //Matriz de adyacencia
     int matriz[][];
+    public final static int INF= 9999;
 
     public Grafo(int nodes, int mascarilla) {
         this.nodos = new Lista();
@@ -41,7 +42,7 @@ public class Grafo {
     }
 
     public void createNodes(int n, int mascarilla) {
-        Nodo.size = 850/n;
+        Nodo.size = 1070/n;
         if(Nodo.size<30){
             Nodo.size = 30;
         }
@@ -51,8 +52,8 @@ public class Grafo {
         
         for (int i = 0; i < n; i++) {
             if (nodos.isEmpty()) {
-                int x = r.nextInt(858-Nodo.size);
-                int y = r.nextInt(630-Nodo.size);
+                int x = r.nextInt(1070-Nodo.size);
+                int y = r.nextInt(510-Nodo.size);
                 if (mascarilla == 2) {
                     m = r.nextBoolean();
                 }
@@ -60,11 +61,11 @@ public class Grafo {
                 nodos.add(new Nodo(i, x, y, m));
             } else {
                 
-                int x = r.nextInt(858-Nodo.size);
-                int y = r.nextInt(630-Nodo.size);
+                int x = r.nextInt(1070-Nodo.size);
+                int y = r.nextInt(510-Nodo.size);
                 while (intercede(x, y)) {
-                    x = r.nextInt(858-Nodo.size);
-                    y = r.nextInt(630-Nodo.size);
+                    x = r.nextInt(1070-Nodo.size);
+                    y = r.nextInt(510-Nodo.size);
                 }
                 if (mascarilla == 2)m = r.nextBoolean();
                 nodos.add(new Nodo(i, x, y, m));
@@ -310,6 +311,34 @@ public class Grafo {
     public boolean checkProbability(int i) {
         return r.nextInt(100) < i;
     }
+    
+    public double checkFloatProbability(Nodo origen, Nodo destino, int distancia) {
+        if (origen.isMascarilla()) {
+            if (destino.isMascarilla()) {
+                if (distancia > 2) {
+                    return 0.20;
+                }
+                return 0.30;
+            } else {
+                if (distancia > 2) {
+                    return 0.30;
+                }
+                return 0.40;
+            }
+        } else {
+            if (destino.isMascarilla()) {
+                if (distancia > 2) {
+                    return 0.40;
+                }
+                return 0.60;
+            } else {
+                if (distancia > 2) {
+                    return 0.80;
+                }
+                return 0.90;
+            }
+        }
+    }
 
     public void displayMatriz() {
         for (int i = 0; i < nodos.size(); i++) {
@@ -359,6 +388,10 @@ public class Grafo {
         for (Nodo nodo : nodos) {
             nodo.draw(graphics);
         }
+    }
+    
+    public String getCamino(Nodo n){
+        return Warshall.floydWarshall(matriz, this, n);
     }
 
 }
