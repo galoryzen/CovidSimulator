@@ -6,6 +6,7 @@ import Principal.Grafo;
 import static Principal.Grafo.crearGrafo;
 import static Principal.Grafo.generarIteraciones;
 import Principal.Nodo;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -34,15 +35,19 @@ public class Frame extends javax.swing.JFrame {
     int it = 0;
     StringBuilder sb = new StringBuilder();
     String texto = "Iteración #";
+    MouseL ml;
 
     public Frame() {
         initComponents();
         this.setLocationRelativeTo(null);
         panelg = panelDraw.getGraphics();
-        /*
-        MouseL ml = new MouseL();
-        this.addMouseListener(ml);
-         */
+        
+        
+        ml = new MouseL(g, panelg);
+        addMouseListener(ml);
+        addMouseMotionListener(ml);
+        addMouseWheelListener(ml);
+         
     }
 
     /**
@@ -213,6 +218,7 @@ public class Frame extends javax.swing.JFrame {
         g.displayIteraciones();
         g.displayGrafo();
         g.displayMatriz();
+        ml.setG(g);
     }//GEN-LAST:event_CrearActionPerformed
 
     private void AnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnteriorActionPerformed
