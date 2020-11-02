@@ -42,6 +42,11 @@ public class Grafo {
     }
 
     public void createNodes(int n, int mascarilla) {
+        /*
+        Si mascarilla = 0 es random
+        Si mascarilla = 1 mascarilla pa´ todos
+        Si mascarilla = 2 mascarilla pa´ ninguno
+        */
         Nodo.size = 1070 / n;
         if (Nodo.size < 30) {
             Nodo.size = 30;

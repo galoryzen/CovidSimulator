@@ -40,6 +40,9 @@ public class Frame extends javax.swing.JFrame {
     public Frame() {
         initComponents();
         this.setLocationRelativeTo(null);
+        propiedades.add(maskon);
+        propiedades.add(maskoff);
+        propiedades.add(aleatorio);
         panelg = panelDraw.getGraphics();
 
         ml = new MouseL(g, panelg);
@@ -58,18 +61,19 @@ public class Frame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        propiedades = new javax.swing.ButtonGroup();
         panelDraw = new javax.swing.JPanel();
         itera = new javax.swing.JTextField();
         Anterior = new javax.swing.JButton();
         Crear = new javax.swing.JButton();
         Siguiente = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
+        maskon = new javax.swing.JRadioButton();
+        maskoff = new javax.swing.JRadioButton();
+        aleatorio = new javax.swing.JRadioButton();
+        cantidadnodos = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -140,26 +144,6 @@ public class Frame extends javax.swing.JFrame {
         });
         getContentPane().add(Siguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 580, 40, 90));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/mascarilla.png"))); // NOI18N
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 590, 70, 50));
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/sinmascarilla.png"))); // NOI18N
-        jButton2.setBorderPainted(false);
-        jButton2.setContentAreaFilled(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 590, 60, -1));
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/random.png"))); // NOI18N
-        jButton3.setToolTipText("");
-        jButton3.setBorder(null);
-        jButton3.setBorderPainted(false);
-        jButton3.setContentAreaFilled(false);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 590, -1, 60));
-
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/play.png"))); // NOI18N
         jButton4.setBorder(null);
         jButton4.setBorderPainted(false);
@@ -187,20 +171,54 @@ public class Frame extends javax.swing.JFrame {
         });
         getContentPane().add(Salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 0, -1, -1));
 
+        maskon.setBorder(null);
+        maskon.setContentAreaFilled(false);
+        maskon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        maskon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maskonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(maskon, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 640, 20, 30));
+
+        maskoff.setContentAreaFilled(false);
+        maskoff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(maskoff, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 641, 20, 30));
+
+        aleatorio.setContentAreaFilled(false);
+        aleatorio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(aleatorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 640, -1, 30));
+
+        cantidadnodos.setFont(new java.awt.Font("Cambria Math", 0, 14)); // NOI18N
+        cantidadnodos.setForeground(new java.awt.Color(0, 51, 51));
+        cantidadnodos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        cantidadnodos.setBorder(null);
+        cantidadnodos.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        cantidadnodos.setOpaque(false);
+        getContentPane().add(cantidadnodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 590, 160, 30));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/gui2.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 680));
-
-        jTextField1.setText("jTextField1");
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 590, 160, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void CrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearActionPerformed
-        g = crearGrafo(20, 0.2f, 0);
+        String numeroNodos = cantidadnodos.getText();
+        int nNodos = Integer.parseInt(numeroNodos);
+        int masksino = 0;
+        
+        if (maskon.isSelected())
+            masksino=0;
+        if (maskoff.isSelected())
+            masksino=1;
+        if (aleatorio.isSelected())
+            masksino=2;
+        
+        g = crearGrafo(20, 0.2f, masksino);
         //Mientras el grafo que se crea no sea fuertemente conexo, no dejará de generarlos
         while (!g.isStronglyConnected()) {
-            g = crearGrafo(20, 0.2f, 0);
+            g = crearGrafo(20, 0.2f, masksino);
         }
         it = 0;
         StringBuilder sb = new StringBuilder();
@@ -284,6 +302,10 @@ public class Frame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void maskonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maskonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_maskonActionPerformed
+
     
 
     public void drawGrafo(Grafo gr) throws InterruptedException {
@@ -308,13 +330,14 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JButton Crear;
     private javax.swing.JButton Salir;
     private javax.swing.JButton Siguiente;
+    private javax.swing.JRadioButton aleatorio;
+    private javax.swing.JTextField cantidadnodos;
     private javax.swing.JTextField itera;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JRadioButton maskoff;
+    private javax.swing.JRadioButton maskon;
     private javax.swing.JPanel panelDraw;
+    private javax.swing.ButtonGroup propiedades;
     // End of variables declaration//GEN-END:variables
 }
