@@ -24,6 +24,7 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
     Grafo g;
     Graphics graphics;
     double scale = 1;
+    double translateX = 0, translateY = 0;
     int size = 0;
     int actualX, actualY;
 
@@ -34,10 +35,12 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
 
     @Override
     public void mouseClicked(MouseEvent me) {
+
     }
 
     @Override
     public void mousePressed(MouseEvent me) {
+
     }
 
     @Override
@@ -54,8 +57,11 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
 
     @Override
     public void mouseDragged(MouseEvent me) {
+        
     }
 
+
+    
     @Override
     public void mouseMoved(MouseEvent me) {
         if (g != null) {
@@ -67,6 +73,28 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
                 }
             }
         }
+        boolean inArea = false;
+            //Area panel is 1070, 510
+            if (me.getX() < 40) {
+                translateX += 2;
+                inArea = true;
+            } else if (me.getX() > 1030) {
+                translateX -= 2;
+                inArea = true;
+            }
+
+            if (me.getY() < 30) {
+                translateY += 2;
+                inArea = true;
+            } else if (me.getY() > 480) {
+                translateY -= 2;
+                inArea = true;
+            }
+            System.out.println(translateX + "," + translateY);
+            if (inArea) {
+                graphics.clearRect(0, 0, 1070, 510);
+                g.draw(graphics,scale, translateX, translateY);
+            }
     }
 
     @Override
@@ -74,29 +102,65 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
 
         double wheelR = mwe.getPreciseWheelRotation();
         if (g != null) {
-            if(wheelR==1){
-                    scale -= 0.1;
-                    if(scale<=0)
-                        scale = 0.1;
-            }else{
+            if (wheelR == 1) {
+                scale -= 0.1;
+                if (scale <= 0) {
+                    scale = 0.1;
+                }
+            } else {
                 scale += 0.1;
             }
-
-            for (Nodo nodo : g.getNodos()) {
-                nodo.setX((int) (nodo.getOriginalX() * scale));
-                nodo.setY((int) (nodo.getOriginalY()* scale));
-                size = (int) (Nodo.size * scale);
-                nodo.setWidth(size);
-                nodo.setHeight(size);
-                nodo.setRect(nodo.getX(), nodo.getY(), size, size);
-            }
             graphics.clearRect(0, 0, 1070, 510);
-            g.draw(graphics);
+            g.draw(graphics, scale, translateX, translateY);
         }
     }
+    
+    /*
+    public void mouseInArea(MouseEvent me){
+        boolean inArea = false;
+            //Area panel is 1070, 510
+            if (me.getX() < 40) {
+                translateX += 2;
+                inArea = true;
+            } else if (me.getX() > 1030) {
+                translateX -= 2;
+                inArea = true;
+            }
 
+            if (me.getY() < 30) {
+                translateY += 2;
+                inArea = true;
+            } else if (me.getY() > 480) {
+                translateY -= 2;
+                inArea = true;
+            }
+            System.out.println(translateX + "," + translateY);
+            if (inArea) {
+                graphics.clearRect(0, 0, 1070, 510);
+                g.draw(graphics,scale, translateX, translateY);
+            }
+    }
+    */
     public void setG(Grafo g) {
         this.g = g;
     }
 
+    public double getScale() {
+        return scale;
+    }
+
+    public double getTranslateX() {
+        return translateX;
+    }
+
+    public double getTranslateY() {
+        return translateY;
+    }
+    
+    public void initialize(){
+        translateX=0;
+        translateY=0;
+        scale=1;
+    }
+    
 }

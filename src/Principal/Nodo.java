@@ -90,7 +90,7 @@ public class Nodo {
         this.infectado = infectado;
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics g, double sc, double tx, double ty) {
         if (infectado) {
             g.setColor(Color.red);
         } else {
@@ -99,7 +99,6 @@ public class Nodo {
         g.fillOval(this.x, this.y, width, height);
         //g.setColor(Color.yellow);
         //g.fillRect(rect.x, rect.y, rect.width, rect.height);
-        drawConexiones(g);
     }
 
     public void setWidth(int width) {
@@ -109,17 +108,25 @@ public class Nodo {
     public void setHeight(int height) {
         this.height = height;
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
     
     
     
-    private void drawConexiones(Graphics g) {
+    public void drawConexiones(Graphics g) {
         for (Nodo conexion : conexiones) {
             if (infectado) {
                 g.setColor(Color.red);
             } else {
                 g.setColor(Color.white);
             }
-            g.drawLine(x + width / 2, y + height / 2, conexion.getX() + width / 2, conexion.getY() + height / 2);
+            g.drawLine(x + width / 2, y + height / 2, conexion.getX() + conexion.getWidth() / 2, conexion.getY() + conexion.getHeight() / 2);
 
         }
     }

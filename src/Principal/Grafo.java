@@ -30,7 +30,7 @@ public class Grafo {
     static Random r = new Random();
     //Matriz de adyacencia
     int matriz[][];
-    public final static int INF= 9999;
+    public final static int INF = 9999;
 
     public Grafo(int nodes, int mascarilla) {
         this.nodos = new Lista();
@@ -42,32 +42,37 @@ public class Grafo {
     }
 
     public void createNodes(int n, int mascarilla) {
-        Nodo.size = 1070/n;
-        if(Nodo.size<30){
+        Nodo.size = 1070 / n;
+        if (Nodo.size < 30) {
             Nodo.size = 30;
         }
         boolean m = false;
-        if (mascarilla == 0) m = true;
-        
-        
+        if (mascarilla == 0) {
+            m = true;
+        }
+
         for (int i = 0; i < n; i++) {
             if (nodos.isEmpty()) {
-                int x = r.nextInt(1070-Nodo.size);
-                int y = r.nextInt(510-Nodo.size);
+                int x = r.nextInt(1070 - Nodo.size);
+                int y = r.nextInt(510 - Nodo.size);
                 if (mascarilla == 2) {
                     m = r.nextBoolean();
                 }
-                if (mascarilla == 2)m = r.nextBoolean();
+                if (mascarilla == 2) {
+                    m = r.nextBoolean();
+                }
                 nodos.add(new Nodo(i, x, y, m));
             } else {
-                
-                int x = r.nextInt(1070-Nodo.size);
-                int y = r.nextInt(510-Nodo.size);
+
+                int x = r.nextInt(1070 - Nodo.size);
+                int y = r.nextInt(510 - Nodo.size);
                 while (intercede(x, y)) {
-                    x = r.nextInt(1070-Nodo.size);
-                    y = r.nextInt(510-Nodo.size);
+                    x = r.nextInt(1070 - Nodo.size);
+                    y = r.nextInt(510 - Nodo.size);
                 }
-                if (mascarilla == 2)m = r.nextBoolean();
+                if (mascarilla == 2) {
+                    m = r.nextBoolean();
+                }
                 nodos.add(new Nodo(i, x, y, m));
             }
         }
@@ -78,17 +83,17 @@ public class Grafo {
         Rectangle newN, actual;
         newN = new Rectangle();
         //Hace un Rectangulo que cubre tanto arriba como debajo del dibujo
-        newN.height =(int) (Nodo.size*0.25)+Nodo.size;
-        newN.width =(int) (Nodo.size*0.25)+Nodo.size;
-        newN.x = x - Nodo.size/4;
-        newN.y = y - Nodo.size/4;
+        newN.height = (int) (Nodo.size * 0.25) + Nodo.size;
+        newN.width = (int) (Nodo.size * 0.25) + Nodo.size;
+        newN.x = x - Nodo.size / 4;
+        newN.y = y - Nodo.size / 4;
 
         for (Nodo nodo : nodos) {
             actual = new Rectangle();
-            actual.x = nodo.getX() - Nodo.size/4;
-            actual.y = nodo.getY() - Nodo.size/4;
-            actual.width =(int) (Nodo.size*0.25)+Nodo.size;
-            actual.height =(int) (Nodo.size*0.25)+Nodo.size;
+            actual.x = nodo.getX() - Nodo.size / 4;
+            actual.y = nodo.getY() - Nodo.size / 4;
+            actual.width = (int) (Nodo.size * 0.25) + Nodo.size;
+            actual.height = (int) (Nodo.size * 0.25) + Nodo.size;
             if (newN.intersects(actual) || actual.intersects(newN)) {
                 return true;
             }
@@ -255,6 +260,9 @@ public class Grafo {
             }
             i++;
         }
+        for (Nodo nodo : g.nodos) {
+            nodo.setInfeccion(false);
+        }
     }
 
     //Muestra las iteraciones
@@ -311,7 +319,7 @@ public class Grafo {
     public boolean checkProbability(int i) {
         return r.nextInt(100) < i;
     }
-    
+
     public double checkFloatProbability(Nodo origen, Nodo destino, int distancia) {
         if (origen.isMascarilla()) {
             if (destino.isMascarilla()) {
@@ -383,14 +391,23 @@ public class Grafo {
         this.matriz = matriz;
     }
 
-    
-    public void draw(Graphics graphics) {
+    public void draw(Graphics graphics, double sc, double tx, double ty) {
         for (Nodo nodo : nodos) {
-            nodo.draw(graphics);
+            nodo.setX((int) (nodo.getOriginalX() * sc + tx));
+            nodo.setY((int) (nodo.getOriginalY() * sc + ty));
+            int size = (int) (Nodo.size * sc);
+            nodo.setWidth(size);
+            nodo.setHeight(size);
+            nodo.setRect(nodo.getX(), nodo.getY(), size, size);
+            nodo.draw(graphics, sc, tx, ty);
+        }
+        
+        for (Nodo nodo : nodos) {
+            nodo.drawConexiones(graphics);
         }
     }
-    
-    public String getCamino(Nodo n){
+
+    public String getCamino(Nodo n) {
         return Warshall.floydWarshall(matriz, this, n);
     }
 

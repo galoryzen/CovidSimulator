@@ -41,13 +41,12 @@ public class Frame extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         panelg = panelDraw.getGraphics();
-        
-        
+
         ml = new MouseL(g, panelg);
-        addMouseListener(ml);
-        addMouseMotionListener(ml);
-        addMouseWheelListener(ml);
-         
+        panelDraw.addMouseListener(ml);
+        panelDraw.addMouseMotionListener(ml);
+        panelDraw.addMouseWheelListener(ml);
+
     }
 
     /**
@@ -198,10 +197,10 @@ public class Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearActionPerformed
-        g = crearGrafo(10, 0.2f, 0);
+        g = crearGrafo(20, 0.2f, 0);
         //Mientras el grafo que se crea no sea fuertemente conexo, no dejará de generarlos
         while (!g.isStronglyConnected()) {
-            g = crearGrafo(10, 0.2f, 0);
+            g = crearGrafo(20, 0.2f, 0);
         }
         it = 0;
         StringBuilder sb = new StringBuilder();
@@ -226,7 +225,11 @@ public class Frame extends javax.swing.JFrame {
         for (Nodo nodo : g.getNodos()) {
             if (n.contains(nodo)) {
                 nodo.setInfeccion(false);
-                nodo.draw(panelg);
+                try {
+                    drawGrafo(g);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         if (it > 0) {
@@ -247,7 +250,11 @@ public class Frame extends javax.swing.JFrame {
         Lista<Nodo> n = g.getIteraciones().get(it);
         for (Nodo nodo : n) {
             nodo.setInfeccion(true);
-            nodo.draw(panelg);
+            try {
+                drawGrafo(g);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         System.out.println(it);
         System.out.println(g.getIteraciones().size());
@@ -258,7 +265,7 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_SalirActionPerformed
 
     private void iteraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iteraActionPerformed
-        
+
     }//GEN-LAST:event_iteraActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -267,20 +274,23 @@ public class Frame extends javax.swing.JFrame {
             Lista<Nodo> n = g.getIteraciones().get(it);
             for (Nodo nodo : n) {
                 nodo.setInfeccion(true);
-                nodo.draw(panelg);
-            }
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    drawGrafo(g);
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    
+
     public void drawGrafo(Grafo gr) throws InterruptedException {
         panelDraw.getGraphics().clearRect(0, 0, panelDraw.getWidth(), panelDraw.getHeight());
         panelDraw.getGraphics().fillRect(0, 0, panelDraw.getWidth(), panelDraw.getHeight());
-        gr.draw(panelDraw.getGraphics());
+        ml.initialize();
+        gr.draw(panelDraw.getGraphics(), ml.getScale(), ml.getTranslateX(), ml.getTranslateY());
 
         /*
         int i = 0;
