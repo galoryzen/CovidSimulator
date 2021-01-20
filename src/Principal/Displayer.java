@@ -9,8 +9,8 @@ import Estructuras.Lista;
 import Principal.Grafo;
 
 /**
- *
- * @author Raul
+ * Se utilizo esta clase para probar los métodos realizados en este proyecto.
+ * @author Raul,Sebastian,German
  */
 public class Displayer {
     

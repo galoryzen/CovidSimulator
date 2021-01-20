@@ -2,11 +2,13 @@ package Estructuras;
 
 import java.util.Iterator;
 
-
+/*
+    Implementación de la lista realizada por nuestra cuenta.
+*/
 public class Lista<Item> implements Iterable<Item> {
 
     private Node PTR;
-
+    
     @Override
     public Iterator<Item> iterator() {
         return new ListaIterador<Item>(this);
@@ -56,7 +58,7 @@ public class Lista<Item> implements Iterable<Item> {
     public Lista() {
         PTR = null;
     }
-
+    
     public void add(Object item) {
         Node P = PTR;
         Node Q = new Node();
@@ -98,7 +100,6 @@ public class Lista<Item> implements Iterable<Item> {
         return p.Dato;
     }
     
-
     public int size() {
         int c = 0;
         Node p = PTR;

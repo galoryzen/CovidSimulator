@@ -5,28 +5,33 @@
  */
 package Helpers;
 
+import Estructuras.Lista;
+import GUI.Frame;
 import Principal.Grafo;
 import Principal.Nodo;
-import java.awt.Color;
+import Principal.Warshall;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
- * @author germa
+ * Se implementa el MouseListener, el cual permite moverse alrededor del grafo.
+ * @author Raul,Sebastian,German
  */
 public class MouseL implements MouseListener, MouseMotionListener, MouseWheelListener {
 
     Grafo g;
     Graphics graphics;
-    double scale = 1;
-    double translateX = 0, translateY = 0;
+    public static double scale = 1;
     int size = 0;
     int actualX, actualY;
+    public static Lista<Nodo> camino ;
 
     public MouseL(Grafo g, Graphics gr) {
         this.g = g;
@@ -35,7 +40,39 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
 
     @Override
     public void mouseClicked(MouseEvent me) {
-
+        if (g != null) {
+            graphics.clearRect(0, 0, 1070, 510);
+            try {
+                g.draw(graphics, scale, KeyboardL.translateX, KeyboardL.translateY);
+            } catch (IOException ex) {
+                Logger.getLogger(MouseL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            for (Nodo nodo : g.getNodos()) {
+               
+                if (nodo.getR().contains(me.getX(), me.getY()) && !nodo.isInfectado()) {
+                    camino = Warshall.floydWarshall(g.getMatriz(), g, nodo);
+                    Frame.isInfec = 0;
+                    try {
+                        g.createPath(graphics, camino);
+                    } catch (IOException ex) {
+                        Logger.getLogger(MouseL.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else if(nodo.getR().contains(me.getX(), me.getY()) && nodo.isInfectado()){
+                    Frame.isInfec = 1;
+                    g.noMorePaths();
+                    try {
+                        g.createPath(graphics, nodo);
+                    } catch (IOException ex) {
+                        Logger.getLogger(MouseL.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            
+            
+            
+        }
     }
 
     @Override
@@ -57,44 +94,30 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        
+
     }
 
-
-    
     @Override
     public void mouseMoved(MouseEvent me) {
+        /* 
         if (g != null) {
+            graphics.clearRect(0, 0, 1070, 510);
+            g.draw(graphics, scale, KeyboardL.translateX, KeyboardL.translateY);
+            
             for (Nodo nodo : g.getNodos()) {
                 if (nodo.getR().contains(me.getX(), me.getY())) {
+                    
                     graphics.setColor(Color.yellow);
                     graphics.drawString(String.valueOf(me.getX()), me.getX(), me.getY());
                     graphics.drawString(String.valueOf(me.getY()), me.getX() + 30, me.getY());
+                    
+                    graphics.setColor(Color.yellow);
+                    graphics.fillRect(me.getX(), me.getY()-170, 140, 170);
                 }
             }
+            
         }
-        boolean inArea = false;
-            //Area panel is 1070, 510
-            if (me.getX() < 40) {
-                translateX += 2;
-                inArea = true;
-            } else if (me.getX() > 1030) {
-                translateX -= 2;
-                inArea = true;
-            }
-
-            if (me.getY() < 30) {
-                translateY += 2;
-                inArea = true;
-            } else if (me.getY() > 480) {
-                translateY -= 2;
-                inArea = true;
-            }
-            System.out.println(translateX + "," + translateY);
-            if (inArea) {
-                graphics.clearRect(0, 0, 1070, 510);
-                g.draw(graphics,scale, translateX, translateY);
-            }
+        */
     }
 
     @Override
@@ -111,36 +134,14 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
                 scale += 0.1;
             }
             graphics.clearRect(0, 0, 1070, 510);
-            g.draw(graphics, scale, translateX, translateY);
+            try {
+                g.draw(graphics, scale, KeyboardL.translateX, KeyboardL.translateY);
+            } catch (IOException ex) {
+                Logger.getLogger(MouseL.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-    
-    /*
-    public void mouseInArea(MouseEvent me){
-        boolean inArea = false;
-            //Area panel is 1070, 510
-            if (me.getX() < 40) {
-                translateX += 2;
-                inArea = true;
-            } else if (me.getX() > 1030) {
-                translateX -= 2;
-                inArea = true;
-            }
 
-            if (me.getY() < 30) {
-                translateY += 2;
-                inArea = true;
-            } else if (me.getY() > 480) {
-                translateY -= 2;
-                inArea = true;
-            }
-            System.out.println(translateX + "," + translateY);
-            if (inArea) {
-                graphics.clearRect(0, 0, 1070, 510);
-                g.draw(graphics,scale, translateX, translateY);
-            }
-    }
-    */
     public void setG(Grafo g) {
         this.g = g;
     }
@@ -149,18 +150,8 @@ public class MouseL implements MouseListener, MouseMotionListener, MouseWheelLis
         return scale;
     }
 
-    public double getTranslateX() {
-        return translateX;
+    public void initialize() {
+        scale = 1;
     }
 
-    public double getTranslateY() {
-        return translateY;
-    }
-    
-    public void initialize(){
-        translateX=0;
-        translateY=0;
-        scale=1;
-    }
-    
 }

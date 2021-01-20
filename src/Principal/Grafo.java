@@ -3,8 +3,11 @@ package Principal;
 import Estructuras.Lista;
 import GUI.Frame;
 import Estructuras.Pila;
+import Helpers.KeyboardL;
+import Helpers.MouseL;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
@@ -16,8 +19,8 @@ import java.util.logging.Logger;
  * and open the template in the editor.
  */
 /**
- *
- * @author Raul
+ * Se realiza el grafo junto con sus métodos que son la creación de los nodos aristas.
+ * @author Raul,Sebastian,German
  */
 public class Grafo {
 
@@ -30,7 +33,9 @@ public class Grafo {
     static Random r = new Random();
     //Matriz de adyacencia
     int matriz[][];
+    String posibleContagio;
     public final static int INF = 9999;
+    public Frame frame;
 
     public Grafo(int nodes, int mascarilla) {
         this.nodos = new Lista();
@@ -43,14 +48,20 @@ public class Grafo {
 
     public void createNodes(int n, int mascarilla) {
         /*
-        Si mascarilla = 0 es random
-        Si mascarilla = 1 mascarilla pa´ todos
-        Si mascarilla = 2 mascarilla pa´ ninguno
-        */
+        Si mascarilla = 0 mascarilla para todos
+        Si mascarilla = 1 mascarilla para ninguno
+        Si mascarilla = 2 es random
+         */
+
         Nodo.size = 1070 / n;
         if (Nodo.size < 30) {
             Nodo.size = 30;
         }
+
+        if (Nodo.size > 150) {
+            Nodo.size = 150;
+        }
+
         boolean m = false;
         if (mascarilla == 0) {
             m = true;
@@ -396,7 +407,7 @@ public class Grafo {
         this.matriz = matriz;
     }
 
-    public void draw(Graphics graphics, double sc, double tx, double ty) {
+    public void draw(Graphics graphics, double sc, double tx, double ty) throws IOException {
         for (Nodo nodo : nodos) {
             nodo.setX((int) (nodo.getOriginalX() * sc + tx));
             nodo.setY((int) (nodo.getOriginalY() * sc + ty));
@@ -404,16 +415,59 @@ public class Grafo {
             nodo.setWidth(size);
             nodo.setHeight(size);
             nodo.setRect(nodo.getX(), nodo.getY(), size, size);
-            nodo.draw(graphics, sc, tx, ty);
+            nodo.draw(graphics);
         }
-        
+
         for (Nodo nodo : nodos) {
             nodo.drawConexiones(graphics);
         }
     }
 
-    public String getCamino(Nodo n) {
+    public Lista getCamino(Nodo n) {
         return Warshall.floydWarshall(matriz, this, n);
+    }
+
+    public void createPath(Graphics graphics, Lista<Nodo> camino) throws IOException {
+        noMorePaths();
+        if (camino != null) {
+            for (int i = 0; i < camino.size(); i++) {
+                Nodo n = camino.get(i);
+                n.inPath = true;
+                if (i + 1 < camino.size()) {
+                    Nodo n2 = camino.get(i + 1);
+                    n2.inPath = true;
+                }
+            }
+            String path = "";
+            for (Nodo nodo : camino) {
+                path += " " + String.valueOf(nodo.getValor());
+            }
+            frame.setCamino(path);
+            draw(graphics, MouseL.scale, KeyboardL.translateX, KeyboardL.translateY);
+        }else{
+            Frame.isInfec=2;
+            frame.setCamino("Aun no hay un nodo infectado");
+        }
+
+    }
+
+    public void noMorePaths() {
+        this.posibleContagio = "";
+        for (Nodo nodo : nodos) {
+            nodo.inPath = false;
+            this.posibleContagio += " " + nodo.getValor();
+        }
+    }
+
+    public void createPath(Graphics graphics, Nodo nodo) throws IOException {
+        nodo.inPath = true;
+        String path = "";
+        for (Nodo conexion : nodo.getConexiones()) {
+            conexion.inPath = true;
+            path += " " + String.valueOf(conexion.getValor());
+        }
+        frame.setCamino(path);
+        draw(graphics, MouseL.scale, KeyboardL.translateX, KeyboardL.translateY);
     }
 
 }

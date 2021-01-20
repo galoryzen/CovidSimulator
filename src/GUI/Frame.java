@@ -1,6 +1,7 @@
 package GUI;
 
 import Estructuras.Lista;
+import Helpers.KeyboardL;
 import Helpers.MouseL;
 import Principal.Grafo;
 import static Principal.Grafo.crearGrafo;
@@ -8,10 +9,12 @@ import static Principal.Grafo.generarIteraciones;
 import Principal.Nodo;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,8 +25,9 @@ import java.util.logging.Logger;
  * and open the template in the editor.
  */
 /**
+ * Creación del JFrame que contiene la interfaz con el que usuario interactua.
  *
- * @author Raul
+ * @author Raul,Sebastian,Germán
  */
 public class Frame extends javax.swing.JFrame {
 
@@ -36,6 +40,9 @@ public class Frame extends javax.swing.JFrame {
     StringBuilder sb = new StringBuilder();
     String texto = "Iteración #";
     MouseL ml;
+    KeyboardL key;
+    int translateX, translateY;
+    public static int isInfec = 0;
 
     public Frame() {
         initComponents();
@@ -44,12 +51,17 @@ public class Frame extends javax.swing.JFrame {
         propiedades.add(maskoff);
         propiedades.add(aleatorio);
         panelg = panelDraw.getGraphics();
-
+        aleatorio.setSelected(true);
+        itera.setEditable(false);
+        paths.setEditable(false);
         ml = new MouseL(g, panelg);
+        key = new KeyboardL(g, panelg);
+        setFocusable(true);
+        addKeyListener(key);
+        setFocusTraversalKeysEnabled(true);
         panelDraw.addMouseListener(ml);
         panelDraw.addMouseMotionListener(ml);
         panelDraw.addMouseWheelListener(ml);
-
     }
 
     /**
@@ -73,6 +85,7 @@ public class Frame extends javax.swing.JFrame {
         maskoff = new javax.swing.JRadioButton();
         aleatorio = new javax.swing.JRadioButton();
         cantidadnodos = new javax.swing.JTextField();
+        paths = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -96,7 +109,7 @@ public class Frame extends javax.swing.JFrame {
 
         getContentPane().add(panelDraw, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 1070, 510));
 
-        itera.setBackground(new java.awt.Color(0, 34, 25));
+        itera.setBackground(new java.awt.Color(0, 51, 51));
         itera.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
         itera.setForeground(new java.awt.Color(255, 255, 255));
         itera.setBorder(null);
@@ -113,48 +126,48 @@ public class Frame extends javax.swing.JFrame {
         Anterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/atras.png"))); // NOI18N
         Anterior.setBorderPainted(false);
         Anterior.setContentAreaFilled(false);
-        Anterior.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Anterior.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Anterior.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AnteriorActionPerformed(evt);
             }
         });
-        getContentPane().add(Anterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 580, 50, 90));
+        getContentPane().add(Anterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 590, 50, 80));
 
         Crear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/generar.png"))); // NOI18N
         Crear.setBorderPainted(false);
         Crear.setContentAreaFilled(false);
-        Crear.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Crear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Crear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CrearActionPerformed(evt);
             }
         });
-        getContentPane().add(Crear, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 580, 90, 90));
+        getContentPane().add(Crear, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 590, 90, 80));
 
         Siguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/adelante.png"))); // NOI18N
         Siguiente.setBorder(null);
         Siguiente.setBorderPainted(false);
         Siguiente.setContentAreaFilled(false);
-        Siguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Siguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Siguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SiguienteActionPerformed(evt);
             }
         });
-        getContentPane().add(Siguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 580, 40, 90));
+        getContentPane().add(Siguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 590, 40, 80));
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/play.png"))); // NOI18N
         jButton4.setBorder(null);
         jButton4.setBorderPainted(false);
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setOpaque(false);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 580, -1, 90));
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 583, -1, 90));
 
         Salir.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
         Salir.setForeground(new java.awt.Color(255, 0, 0));
@@ -163,13 +176,13 @@ public class Frame extends javax.swing.JFrame {
         Salir.setBorder(null);
         Salir.setBorderPainted(false);
         Salir.setContentAreaFilled(false);
-        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Salir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SalirActionPerformed(evt);
             }
         });
-        getContentPane().add(Salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 0, -1, -1));
+        getContentPane().add(Salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 3, -1, 40));
 
         maskon.setBorder(null);
         maskon.setContentAreaFilled(false);
@@ -179,63 +192,85 @@ public class Frame extends javax.swing.JFrame {
                 maskonActionPerformed(evt);
             }
         });
-        getContentPane().add(maskon, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 640, 20, 30));
+        getContentPane().add(maskon, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 640, 20, 30));
 
         maskoff.setContentAreaFilled(false);
         maskoff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(maskoff, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 641, 20, 30));
+        getContentPane().add(maskoff, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 640, 20, 30));
 
         aleatorio.setContentAreaFilled(false);
         aleatorio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(aleatorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 640, -1, 30));
+        getContentPane().add(aleatorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 640, -1, 30));
 
+        cantidadnodos.setBackground(new java.awt.Color(0, 51, 51));
         cantidadnodos.setFont(new java.awt.Font("Cambria Math", 0, 14)); // NOI18N
-        cantidadnodos.setForeground(new java.awt.Color(0, 51, 51));
+        cantidadnodos.setForeground(new java.awt.Color(0, 255, 0));
         cantidadnodos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         cantidadnodos.setBorder(null);
         cantidadnodos.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         cantidadnodos.setOpaque(false);
-        getContentPane().add(cantidadnodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 590, 160, 30));
+        getContentPane().add(cantidadnodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 590, 160, 30));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/gui2.png"))); // NOI18N
+        paths.setEditable(false);
+        paths.setBackground(new java.awt.Color(0, 51, 51));
+        paths.setFont(new java.awt.Font("Myanmar Text", 1, 18)); // NOI18N
+        paths.setForeground(new java.awt.Color(0, 255, 0));
+        paths.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        paths.setText("COVID TRACKER - 19");
+        paths.setBorder(null);
+        paths.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        paths.setOpaque(false);
+        getContentPane().add(paths, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 830, 20));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/fondodos.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 680));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void CrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearActionPerformed
-        String numeroNodos = cantidadnodos.getText();
-        int nNodos = Integer.parseInt(numeroNodos);
+
+        int numeroNodos = 10;
+        if (!cantidadnodos.getText().isEmpty()) {
+            numeroNodos = Integer.parseInt(cantidadnodos.getText());
+        }
+
         int masksino = 0;
-        
-        if (maskon.isSelected())
-            masksino=0;
-        if (maskoff.isSelected())
-            masksino=1;
-        if (aleatorio.isSelected())
-            masksino=2;
-        
-        g = crearGrafo(20, 0.2f, masksino);
+
+        if (maskon.isSelected()) {
+            masksino = 0;
+        }
+        if (maskoff.isSelected()) {
+            masksino = 1;
+        }
+        if (aleatorio.isSelected()) {
+            masksino = 2;
+        }
+
+        g = crearGrafo(numeroNodos, 0.2f, masksino);
         //Mientras el grafo que se crea no sea fuertemente conexo, no dejará de generarlos
         while (!g.isStronglyConnected()) {
-            g = crearGrafo(20, 0.2f, masksino);
+            g = crearGrafo(numeroNodos, 0.2f, masksino);
         }
+        g.frame = this;
         it = 0;
         StringBuilder sb = new StringBuilder();
         sb.append(texto + String.valueOf(it));
         itera.setText(String.valueOf(sb));
+        ml.setG(g);
+        key.setG(g);
         try {
             drawGrafo(g);
         } catch (InterruptedException ex) {
             Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         generarIteraciones(g, panelDraw.getGraphics());
-        g.checkMatriz();
-        g.displayIteraciones();
-        g.displayGrafo();
         g.displayMatriz();
-        ml.setG(g);
+        setFocus();
+
     }//GEN-LAST:event_CrearActionPerformed
 
     private void AnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnteriorActionPerformed
@@ -244,8 +279,11 @@ public class Frame extends javax.swing.JFrame {
             if (n.contains(nodo)) {
                 nodo.setInfeccion(false);
                 try {
+                    g.noMorePaths();
                     drawGrafo(g);
                 } catch (InterruptedException ex) {
+                    Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
                     Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -256,6 +294,7 @@ public class Frame extends javax.swing.JFrame {
         StringBuilder sb = new StringBuilder();
         sb.append(texto + String.valueOf(it));
         itera.setText(String.valueOf(sb));
+        setFocus();
     }//GEN-LAST:event_AnteriorActionPerformed
 
     private void SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SiguienteActionPerformed
@@ -269,13 +308,18 @@ public class Frame extends javax.swing.JFrame {
         for (Nodo nodo : n) {
             nodo.setInfeccion(true);
             try {
+                g.noMorePaths();
                 drawGrafo(g);
             } catch (InterruptedException ex) {
+                Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         System.out.println(it);
         System.out.println(g.getIteraciones().size());
+
+        setFocus();
     }//GEN-LAST:event_SiguienteActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
@@ -289,30 +333,40 @@ public class Frame extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         while (it < g.getIteraciones().size() - 1) {
             it++;
+            itera.setText(texto + String.valueOf(it));
             Lista<Nodo> n = g.getIteraciones().get(it);
             for (Nodo nodo : n) {
                 nodo.setInfeccion(true);
-                try {
-                    drawGrafo(g);
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            }
+            try {
+                drawGrafo(g);
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        setFocus();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void maskonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maskonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_maskonActionPerformed
 
-    
+    private void setFocus() {
+        panelDraw.setFocusable(true);
+        panelDraw.setFocusTraversalKeysEnabled(true);
+        panelDraw.addKeyListener(key);
+        System.out.println(panelDraw.requestFocusInWindow());
+    }
 
-    public void drawGrafo(Grafo gr) throws InterruptedException {
+    public void drawGrafo(Grafo gr) throws InterruptedException, IOException {
         panelDraw.getGraphics().clearRect(0, 0, panelDraw.getWidth(), panelDraw.getHeight());
         panelDraw.getGraphics().fillRect(0, 0, panelDraw.getWidth(), panelDraw.getHeight());
         ml.initialize();
-        gr.draw(panelDraw.getGraphics(), ml.getScale(), ml.getTranslateX(), ml.getTranslateY());
+        key.initialize();
+        gr.draw(panelDraw.getGraphics(), ml.getScale(), KeyboardL.translateX, KeyboardL.translateY);
 
         /*
         int i = 0;
@@ -323,6 +377,16 @@ public class Frame extends javax.swing.JFrame {
             i++;
         }
          */
+    }
+
+    public void setCamino(String camino) {
+        if (isInfec == 0) {
+            paths.setText("El camino con mayor riesgo de contagio es " + camino);
+        } else if (isInfec == 1) {
+            paths.setText("Los nodos que pueden ser infectados son: " + camino);
+        } else {
+            paths.setText(camino);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -338,6 +402,7 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JRadioButton maskoff;
     private javax.swing.JRadioButton maskon;
     private javax.swing.JPanel panelDraw;
+    private javax.swing.JTextField paths;
     private javax.swing.ButtonGroup propiedades;
     // End of variables declaration//GEN-END:variables
 }
